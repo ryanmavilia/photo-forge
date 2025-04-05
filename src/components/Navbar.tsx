@@ -2,29 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useTheme } from "@/context/ThemeContext";
 
 export default function Navbar() {
   const pathname = usePathname();
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  useEffect(() => {
-    // Check if user prefers dark mode
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
-    setIsDarkMode(prefersDark);
-  }, []);
-
-  const toggleDarkMode = () => {
-    const newMode = !isDarkMode;
-    setIsDarkMode(newMode);
-
-    // Here you would implement a proper theme toggle system
-    // This is a placeholder for now
-    document.documentElement.classList.toggle("dark", newMode);
-  };
+  const { theme, toggleTheme } = useTheme();
 
   const navItems = [
     { label: "Home", path: "/" },
@@ -77,11 +61,11 @@ export default function Navbar() {
 
         <div className="flex items-center gap-4">
           <button
-            onClick={toggleDarkMode}
+            onClick={toggleTheme}
             className="rounded-full p-2 text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
             aria-label="Toggle theme"
           >
-            {isDarkMode ? (
+            {theme === "dark" ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

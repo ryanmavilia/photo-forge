@@ -107,7 +107,18 @@ export default function Home() {
             <div className="md:w-1/2 relative mt-12 md:mt-0">
               <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden shadow-2xl rotate-1 transform transition-transform hover:rotate-0 duration-300">
                 <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/20 to-purple-500/10 dark:from-blue-900/30 dark:to-purple-900/20 z-10"></div>
-                <div className="absolute inset-0 w-full h-full bg-[url('/placeholder-hero.jpg')] bg-cover bg-center"></div>
+                <div className="absolute inset-0 w-full h-full">
+                  <img
+                    src="/placeholder-hero.svg"
+                    alt="Photography tools illustration"
+                    className="w-full h-full object-cover block dark:hidden"
+                  />
+                  <img
+                    src="/placeholder-hero-dark.svg"
+                    alt="Photography tools illustration"
+                    className="w-full h-full object-cover hidden dark:block"
+                  />
+                </div>
               </div>
               <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-green-100 dark:bg-green-900/30 rounded-full blur-3xl -z-10"></div>
               <div className="absolute -top-6 -right-6 w-32 h-32 bg-blue-100 dark:bg-blue-900/30 rounded-full blur-3xl -z-10"></div>
