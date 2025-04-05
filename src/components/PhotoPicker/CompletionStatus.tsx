@@ -2,6 +2,7 @@ interface CompletionStatusProps {
   selectedCount: number;
   targetCount: number;
   onReset: () => void;
+  onContinueFiltering: () => void;
   hasEnoughPhotos: boolean;
 }
 
@@ -9,6 +10,7 @@ export default function CompletionStatus({
   selectedCount,
   targetCount,
   onReset,
+  onContinueFiltering,
   hasEnoughPhotos,
 }: CompletionStatusProps) {
   return (
@@ -34,6 +36,15 @@ export default function CompletionStatus({
         >
           Start Over
         </button>
+
+        {selectedCount > 1 && (
+          <button
+            onClick={onContinueFiltering}
+            className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded"
+          >
+            Continue Filtering
+          </button>
+        )}
 
         {hasEnoughPhotos && (
           <a

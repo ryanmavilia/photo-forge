@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useSwipeable } from "react-swipeable";
 
 export interface PhotoItem {
@@ -42,10 +42,37 @@ export function usePhotoPicker() {
     trackMouse: true,
   });
 
+  // Add keyboard event handlers for arrow keys
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (photos.length === 0 || currentIndex >= photos.length) return;
+
+      if (e.key === "ArrowRight") {
+        handleLike();
+      } else if (e.key === "ArrowLeft") {
+        handleDislike();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleLike, handleDislike, photos.length, currentIndex]);
+
   const resetSelection = () => {
     setSelectedPhotos([]);
     setRejectedPhotos([]);
     setCurrentIndex(0);
+  };
+
+  // Continue filtering with currently selected photos
+  const continueFiltering = () => {
+    setPhotos([...selectedPhotos]);
+    setCurrentIndex(0);
+    setSelectedPhotos([]);
+    setRejectedPhotos([]);
   };
 
   const handleTargetChange = (value: number) => {
@@ -70,6 +97,7 @@ export function usePhotoPicker() {
     handleDislike,
     swipeHandlers,
     resetSelection,
+    continueFiltering,
     handleTargetChange,
   };
 }

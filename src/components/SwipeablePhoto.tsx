@@ -66,7 +66,7 @@ export default function SwipeablePhoto({
         </button>
       </div>
       <div className="text-xs text-center mt-2 text-gray-500">
-        Swipe right to keep, left to discard
+        Swipe right or press right arrow to keep, left to discard
       </div>
     </div>
   );

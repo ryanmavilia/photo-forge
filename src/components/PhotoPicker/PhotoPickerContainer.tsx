@@ -21,6 +21,7 @@ export default function PhotoPickerContainer() {
     handleDislike,
     swipeHandlers,
     resetSelection,
+    continueFiltering,
     handleTargetChange,
   } = usePhotoPicker();
 
@@ -54,6 +55,7 @@ export default function PhotoPickerContainer() {
                 selectedCount={selectedPhotos.length}
                 targetCount={targetCount}
                 onReset={resetSelection}
+                onContinueFiltering={continueFiltering}
                 hasEnoughPhotos={hasEnoughPhotos}
               />
 
