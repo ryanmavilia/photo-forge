@@ -4,7 +4,6 @@ import { useWatermarkingTool } from "@/hooks/useWatermarkingTool";
 import ImageUploader from "./ImageUploader";
 import ImagePreview from "./ImagePreview";
 import WatermarkControls from "./WatermarkControls";
-import WatermarkTextInput from "./WatermarkTextInput";
 import DownloadButton from "./DownloadButton";
 
 export default function WatermarkingToolContainer() {
