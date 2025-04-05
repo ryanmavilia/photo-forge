@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 
 export type WatermarkPosition =
   | "top-left"
@@ -26,6 +26,26 @@ export function useWatermarkingTool() {
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Add refs to track previous values
+  const prevValues = useRef({
+    watermarkText,
+    watermarkPosition,
+    watermarkOpacity,
+    watermarkSize,
+    watermarkColor,
+    isRepeating,
+    rotationAngle,
+  });
+
+  // Add debounce timer ref
+  const debounceTimer = useRef<NodeJS.Timeout | null>(null);
+
+  // Add state for immediate slider values
+  const [immediateOpacity, setImmediateOpacity] = useState<number>(0.5);
+  const [immediateSize, setImmediateSize] = useState<number>(72);
+  const [immediateRotation, setImmediateRotation] = useState<number>(-10);
+  const [immediateColor, setImmediateColor] = useState<string>("#ffffff");
+
   const handleFileChange = useCallback((file: File) => {
     setSelectedFile(file);
     setWatermarkedImage(null);
@@ -46,14 +66,17 @@ export function useWatermarkingTool() {
   }, []);
 
   const handleOpacityChange = useCallback((opacity: number) => {
+    setImmediateOpacity(opacity);
     setWatermarkOpacity(opacity);
   }, []);
 
   const handleSizeChange = useCallback((size: number) => {
+    setImmediateSize(size);
     setWatermarkSize(size);
   }, []);
 
   const handleColorChange = useCallback((color: string) => {
+    setImmediateColor(color);
     setWatermarkColor(color);
   }, []);
 
@@ -62,6 +85,7 @@ export function useWatermarkingTool() {
   }, []);
 
   const handleRotationChange = useCallback((angle: number) => {
+    setImmediateRotation(angle);
     setRotationAngle(angle);
   }, []);
 
@@ -71,11 +95,33 @@ export function useWatermarkingTool() {
       return;
     }
 
+    // Check if any values have actually changed
+    const currentValues = {
+      watermarkText,
+      watermarkPosition,
+      watermarkOpacity,
+      watermarkSize,
+      watermarkColor,
+      isRepeating,
+      rotationAngle,
+    };
+
+    const hasChanged = Object.entries(currentValues).some(
+      ([key, value]) =>
+        prevValues.current[key as keyof typeof currentValues] !== value
+    );
+
+    if (!hasChanged) {
+      return;
+    }
+
+    // Update previous values
+    prevValues.current = currentValues;
+
     setIsProcessing(true);
     setError(null);
 
     try {
-      // Create a canvas element to apply the watermark
       const image = new Image();
 
       image.onload = () => {
@@ -88,12 +134,24 @@ export function useWatermarkingTool() {
           return;
         }
 
-        // Set canvas dimensions to match the image
-        canvas.width = image.width;
-        canvas.height = image.height;
+        // Calculate preview size while maintaining aspect ratio
+        const maxPreviewSize = 1000; // Maximum dimension for preview
+        let width = image.width;
+        let height = image.height;
+
+        if (width > height && width > maxPreviewSize) {
+          height = (height * maxPreviewSize) / width;
+          width = maxPreviewSize;
+        } else if (height > maxPreviewSize) {
+          width = (width * maxPreviewSize) / height;
+          height = maxPreviewSize;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
 
         // Draw the original image on the canvas
-        ctx.drawImage(image, 0, 0);
+        ctx.drawImage(image, 0, 0, width, height);
 
         // Apply the watermark
         ctx.globalAlpha = watermarkOpacity;
@@ -186,7 +244,7 @@ export function useWatermarkingTool() {
         }
 
         // Convert canvas to data URL
-        const watermarkedImageUrl = canvas.toDataURL("image/jpeg");
+        const watermarkedImageUrl = canvas.toDataURL("image/jpeg", 0.8); // Reduced quality for preview
         setWatermarkedImage(watermarkedImageUrl);
         setIsProcessing(false);
       };
@@ -225,10 +283,26 @@ export function useWatermarkingTool() {
     document.body.removeChild(link);
   }, [watermarkedImage, selectedFile]);
 
-  return {
+  // Update useEffect with debounce
+  useEffect(() => {
+    if (selectedFile && imagePreview) {
+      if (debounceTimer.current) {
+        clearTimeout(debounceTimer.current);
+      }
+
+      debounceTimer.current = setTimeout(() => {
+        applyWatermark();
+      }, 300); // 100ms debounce
+    }
+
+    return () => {
+      if (debounceTimer.current) {
+        clearTimeout(debounceTimer.current);
+      }
+    };
+  }, [
     selectedFile,
     imagePreview,
-    watermarkedImage,
     watermarkText,
     watermarkPosition,
     watermarkOpacity,
@@ -236,6 +310,19 @@ export function useWatermarkingTool() {
     watermarkColor,
     isRepeating,
     rotationAngle,
+  ]);
+
+  return {
+    selectedFile,
+    imagePreview,
+    watermarkedImage,
+    watermarkText,
+    watermarkPosition,
+    watermarkOpacity: immediateOpacity,
+    watermarkSize: immediateSize,
+    watermarkColor: immediateColor,
+    isRepeating,
+    rotationAngle: immediateRotation,
     isProcessing,
     error,
     handleFileChange,
@@ -246,7 +333,6 @@ export function useWatermarkingTool() {
     handleColorChange,
     handleRepeatingChange,
     handleRotationChange,
-    applyWatermark,
     downloadImage,
   };
 }

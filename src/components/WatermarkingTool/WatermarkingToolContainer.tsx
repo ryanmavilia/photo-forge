@@ -19,7 +19,6 @@ export default function WatermarkingToolContainer() {
     watermarkColor,
     isRepeating,
     rotationAngle,
-    isProcessing,
     error,
     handleFileChange,
     handleTextChange,
@@ -29,7 +28,6 @@ export default function WatermarkingToolContainer() {
     handleColorChange,
     handleRepeatingChange,
     handleRotationChange,
-    applyWatermark,
     downloadImage,
   } = useWatermarkingTool();
 
@@ -55,10 +53,27 @@ export default function WatermarkingToolContainer() {
 
       {selectedFile && (
         <>
-          <WatermarkTextInput
-            text={watermarkText}
-            onTextChange={handleTextChange}
-          />
+          <div className="mt-6">
+            <label
+              htmlFor="watermark-text"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Watermark Text
+            </label>
+            <div className="grid grid-cols-2 gap-4">
+              <input
+                type="text"
+                id="watermark-text"
+                value={watermarkText}
+                onChange={(e) => handleTextChange(e.target.value)}
+                placeholder="Enter your watermark text"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {(watermarkText || watermarkedImage) && (
+                <DownloadButton onClick={downloadImage} />
+              )}
+            </div>
+          </div>
 
           <WatermarkControls
             position={watermarkPosition}
@@ -74,22 +89,6 @@ export default function WatermarkingToolContainer() {
             onRepeatingChange={handleRepeatingChange}
             onRotationChange={handleRotationChange}
           />
-
-          <div className="flex space-x-4 mt-6">
-            <button
-              onClick={applyWatermark}
-              disabled={!selectedFile || !watermarkText || isProcessing}
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center"
-            >
-              {isProcessing ? (
-                <span className="inline-block mr-2">Processing...</span>
-              ) : (
-                "Apply Watermark"
-              )}
-            </button>
-
-            {watermarkedImage && <DownloadButton onClick={downloadImage} />}
-          </div>
         </>
       )}
 

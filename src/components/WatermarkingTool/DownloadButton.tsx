@@ -8,7 +8,7 @@ export default function DownloadButton({ onClick }: DownloadButtonProps) {
   return (
     <button
       onClick={onClick}
-      className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 flex items-center"
+      className="w-full px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 flex items-center justify-center"
     >
       <svg
         className="w-5 h-5 mr-2"
