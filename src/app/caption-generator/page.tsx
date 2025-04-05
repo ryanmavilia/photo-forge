@@ -34,42 +34,28 @@ export default function CaptionGenerator() {
     setError(null);
 
     try {
-      // In a real app, you would upload the image to your backend
-      // and call the OpenAI API to generate captions.
-      // This is a mock implementation:
+      const formData = new FormData();
+      formData.append("image", selectedFile);
+      formData.append("maxHashtags", maxHashtags.toString());
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // Mock result
-      setCaption({
-        description:
-          "A beautiful sunset over the mountains with vibrant orange and purple hues reflecting off the calm waters below.",
-        hashtags: [
-          "sunset",
-          "mountainview",
-          "naturephotography",
-          "landscapephotography",
-          "goldenhour",
-          "skyscape",
-          "reflection",
-          "outdoorphotography",
-          "travel",
-          "naturelovers",
-          "scenery",
-          "peaceful",
-          "explore",
-          "wanderlust",
-          "beautifulnature",
-          "photooftheday",
-          "eveningvibes",
-          "tranquility",
-          "earthfocus",
-          "naturecapture",
-        ].slice(0, maxHashtags),
+      const response = await fetch("/api/generate-caption", {
+        method: "POST",
+        body: formData,
       });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to generate caption");
+      }
+
+      const data = await response.json();
+      setCaption(data);
     } catch (err) {
-      setError("Failed to generate caption. Please try again.");
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to generate caption. Please try again."
+      );
       console.error(err);
     } finally {
       setLoading(false);

@@ -34,3 +34,17 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Setting Up OpenAI API Key
+
+To use the image caption generator feature, you need to:
+
+1. Get an OpenAI API key from [OpenAI Platform](https://platform.openai.com/api-keys)
+2. Create a `.env.local` file in the root of your project
+3. Add your API key to the `.env.local` file:
+
+```
+OPENAI_API_KEY=your_actual_api_key_here
+```
+
+Note: The `.env.local` file is included in `.gitignore` to ensure your API key isn't committed to version control.
