@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
           ],
         },
       ],
-      max_tokens: 10,
+      max_tokens: 500,
     });
 
     // Extract the response text
