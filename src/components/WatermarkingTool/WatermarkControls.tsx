@@ -8,11 +8,13 @@ interface WatermarkControlsProps {
   size: number;
   color: string;
   isRepeating: boolean;
+  rotationAngle: number;
   onPositionChange: (position: WatermarkPosition) => void;
   onOpacityChange: (opacity: number) => void;
   onSizeChange: (size: number) => void;
   onColorChange: (color: string) => void;
   onRepeatingChange: (isRepeating: boolean) => void;
+  onRotationChange: (angle: number) => void;
 }
 
 export default function WatermarkControls({
@@ -21,11 +23,13 @@ export default function WatermarkControls({
   size,
   color,
   isRepeating,
+  rotationAngle,
   onPositionChange,
   onOpacityChange,
   onSizeChange,
   onColorChange,
   onRepeatingChange,
+  onRotationChange,
 }: WatermarkControlsProps) {
   const positions: { value: WatermarkPosition; label: string }[] = [
     { value: "top-left", label: "Top Left" },
@@ -61,6 +65,32 @@ export default function WatermarkControls({
           </p>
         )}
       </div>
+
+      {isRepeating && (
+        <div className="mb-4">
+          <label
+            htmlFor="rotation"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
+            Rotation Angle: {rotationAngle}°
+          </label>
+          <input
+            type="range"
+            id="rotation"
+            min="-90"
+            max="90"
+            step="5"
+            value={rotationAngle}
+            onChange={(e) => onRotationChange(parseInt(e.target.value))}
+            className="w-full"
+          />
+          <div className="flex justify-between text-xs text-gray-500 mt-1">
+            <span>-90°</span>
+            <span>0°</span>
+            <span>90°</span>
+          </div>
+        </div>
+      )}
 
       {!isRepeating && (
         <div className="mb-4">

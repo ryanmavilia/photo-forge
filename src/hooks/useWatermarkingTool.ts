@@ -22,6 +22,7 @@ export function useWatermarkingTool() {
   const [watermarkSize, setWatermarkSize] = useState<number>(72);
   const [watermarkColor, setWatermarkColor] = useState<string>("#ffffff");
   const [isRepeating, setIsRepeating] = useState<boolean>(false);
+  const [rotationAngle, setRotationAngle] = useState<number>(-10);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -58,6 +59,10 @@ export function useWatermarkingTool() {
 
   const handleRepeatingChange = useCallback((repeat: boolean) => {
     setIsRepeating(repeat);
+  }, []);
+
+  const handleRotationChange = useCallback((angle: number) => {
+    setRotationAngle(angle);
   }, []);
 
   const applyWatermark = useCallback(async () => {
@@ -102,19 +107,27 @@ export function useWatermarkingTool() {
           const spacingX = textWidth + padding;
           const spacingY = watermarkSize * 1.5;
 
-          // Create a slight rotation for the repeating pattern
+          // Create rotation for the repeating pattern
           ctx.save();
-          ctx.rotate(-Math.PI / 18); // -10 degrees
+
+          // Convert degrees to radians for rotation
+          const angleInRadians = (rotationAngle * Math.PI) / 180;
+          ctx.rotate(angleInRadians);
+
+          // Calculate diagonal offset based on rotation
+          const diagonalOffset = Math.abs(
+            Math.sin(angleInRadians) * canvas.height
+          );
 
           // Fill the canvas with repeating text
           for (
-            let y = -spacingY;
-            y < canvas.height + spacingY * 2;
+            let y = -spacingY - diagonalOffset;
+            y < canvas.height + spacingY * 2 + diagonalOffset;
             y += spacingY
           ) {
             for (
-              let x = -spacingX;
-              x < canvas.width + spacingX * 2;
+              let x = -spacingX - diagonalOffset;
+              x < canvas.width + spacingX * 2 + diagonalOffset;
               x += spacingX
             ) {
               ctx.fillText(watermarkText, x, y);
@@ -197,6 +210,7 @@ export function useWatermarkingTool() {
     watermarkSize,
     watermarkColor,
     isRepeating,
+    rotationAngle,
     imagePreview,
   ]);
 
@@ -221,6 +235,7 @@ export function useWatermarkingTool() {
     watermarkSize,
     watermarkColor,
     isRepeating,
+    rotationAngle,
     isProcessing,
     error,
     handleFileChange,
@@ -230,6 +245,7 @@ export function useWatermarkingTool() {
     handleSizeChange,
     handleColorChange,
     handleRepeatingChange,
+    handleRotationChange,
     applyWatermark,
     downloadImage,
   };

@@ -18,6 +18,7 @@ export default function WatermarkingToolContainer() {
     watermarkSize,
     watermarkColor,
     isRepeating,
+    rotationAngle,
     isProcessing,
     error,
     handleFileChange,
@@ -27,6 +28,7 @@ export default function WatermarkingToolContainer() {
     handleSizeChange,
     handleColorChange,
     handleRepeatingChange,
+    handleRotationChange,
     applyWatermark,
     downloadImage,
   } = useWatermarkingTool();
@@ -64,11 +66,13 @@ export default function WatermarkingToolContainer() {
             size={watermarkSize}
             color={watermarkColor}
             isRepeating={isRepeating}
+            rotationAngle={rotationAngle}
             onPositionChange={handlePositionChange}
             onOpacityChange={handleOpacityChange}
             onSizeChange={handleSizeChange}
             onColorChange={handleColorChange}
             onRepeatingChange={handleRepeatingChange}
+            onRotationChange={handleRotationChange}
           />
 
           <div className="flex space-x-4 mt-6">
