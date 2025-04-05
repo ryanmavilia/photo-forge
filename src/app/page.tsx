@@ -17,6 +17,12 @@ export default function Home() {
         >
           Caption Generator
         </Link>
+        <Link
+          href="/watermarking-tool"
+          className="bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-6 rounded-lg text-center"
+        >
+          Watermarking Tool
+        </Link>
       </div>
     </main>
   );

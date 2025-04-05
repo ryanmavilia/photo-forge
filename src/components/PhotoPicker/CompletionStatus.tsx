@@ -47,12 +47,20 @@ export default function CompletionStatus({
         )}
 
         {hasEnoughPhotos && (
-          <a
-            href="/caption-generator"
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
-          >
-            Generate Captions
-          </a>
+          <>
+            <a
+              href="/caption-generator"
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+            >
+              Generate Captions
+            </a>
+            <a
+              href="/watermarking-tool"
+              className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+            >
+              Add Watermarks
+            </a>
+          </>
         )}
       </div>
     </div>
