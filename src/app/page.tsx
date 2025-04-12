@@ -26,6 +26,31 @@ export default function Home() {
       color: "bg-blue-500 hover:bg-blue-600",
     },
     {
+      title: "Metadata Editor",
+      description:
+        "View and edit EXIF data, add keywords, and organize your photo library",
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="w-10 h-10 mb-4 text-orange-500"
+        >
+          <path d="M4 22h14a2 2 0 0 0 2-2V7.5L14.5 2H6a2 2 0 0 0-2 2v4" />
+          <path d="M14 2v6h6" />
+          <path d="M3 15h6" />
+          <path d="M3 19h6" />
+          <path d="M3 11h12" />
+        </svg>
+      ),
+      link: "/metadata-editor",
+      color: "bg-orange-500 hover:bg-orange-600",
+    },
+    {
       title: "Caption Generator",
       description: "Generate engaging captions for your social media posts",
       icon: (
@@ -79,9 +104,9 @@ export default function Home() {
           <div className="flex flex-col md:flex-row items-center gap-12">
             <div className="md:w-1/2 space-y-6">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
-                Your Complete
+                Photo Forge
                 <span className="text-blue-500 block">
-                  Photography Assistant
+                  Your Complete Photography Assistant
                 </span>
               </h1>
               <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-xl">
